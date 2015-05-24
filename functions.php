@@ -23,6 +23,13 @@ function sparkling_content_width() {
 }
 add_action( 'template_redirect', 'sparkling_content_width' );
 
+/**
+ * Set if the theme use gulp, false by default.
+ */
+if ( ! isset( $sparkling_use_gulp ) ) {
+  $sparkling_use_gulp = false;
+}
+
 if ( ! function_exists( 'sparkling_main_content_bootstrap_classes' ) ) :
 /**
  * Add Bootstrap classes to the main-content-area wrapper.
@@ -203,6 +210,8 @@ add_filter( 'gallery_style', 'sparkling_remove_gallery_css' );
  */
 function sparkling_scripts() {
 
+  global $sparkling_use_gulp;
+
   // Add Bootstrap default CSS
   wp_enqueue_style( 'sparkling-bootstrap', get_template_directory_uri() . '/inc/css/bootstrap.min.css' );
 
@@ -220,7 +229,11 @@ function sparkling_scripts() {
   }
 
   // Add main theme stylesheet
-  wp_enqueue_style( 'sparkling-style', get_stylesheet_uri() );
+  if( $sparkling_use_gulp ) {
+    wp_enqueue_style('sparkling-style', get_template_directory_uri() . '/inc/css/main.min.css');
+  } else {
+    wp_enqueue_style('sparkling-style', get_template_directory_uri() . '/inc/css/main.css');
+  }
 
   // Add Modernizr for better HTML5 and CSS3 support
   wp_enqueue_script('sparkling-modernizr', get_template_directory_uri().'/inc/js/modernizr.min.js', array('jquery') );
